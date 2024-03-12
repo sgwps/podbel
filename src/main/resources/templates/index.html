@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Podbel</title>
+</head>
+<body>
+<header>
+    <h3 th:text="${#authentication.getPrincipal().getUsername()}"> </h3>
+</header>
+
+</body>
+</html>
