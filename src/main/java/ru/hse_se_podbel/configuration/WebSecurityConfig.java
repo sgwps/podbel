@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.configurers.FormLoginC
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import ru.hse_se_podbel.data.models.enums.Role;
 import ru.hse_se_podbel.data.service.UserService;
 
 import static org.springframework.security.config.Customizer.withDefaults;
@@ -19,23 +20,25 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class WebSecurityConfig {
     @Autowired
     UserService userService;
+
     @Autowired
-    PasswordEncoder encoder;
+    PasswordEncoderConfig passwordEncoderConfig;
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.authorizeHttpRequests()
-                .anyRequest().permitAll()
-                .and()
-                .formLogin()
-                .loginPage("/login").permitAll()
-                .defaultSuccessUrl("/", true);
-        return httpSecurity.build();
+        return httpSecurity.formLogin(form -> form
+                .loginPage("/login").defaultSuccessUrl("/post_login", true))
+                .authorizeHttpRequests((authorize) -> authorize
+                .requestMatchers("/users**").hasRole(Role.ADMIN.toString())
+                .requestMatchers("/change_password").authenticated()
+                .requestMatchers("/").authenticated()
+                .anyRequest().permitAll())
+                .logout((logout) -> logout.logoutSuccessUrl("/login")).build();
     }
 
 
     @Autowired
     protected void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userService).passwordEncoder(encoder);
+        auth.userDetailsService(userService).passwordEncoder(passwordEncoderConfig.getPasswordEncoder());
     }
 }

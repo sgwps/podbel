@@ -13,4 +13,8 @@ public class RoleAuthority implements GrantedAuthority {
     public String getAuthority() {
         return role.toString();
     }
+
+    public boolean isNotActivated() {  // True - если НЕ активирован
+        return role.equals(Role.ADMIN_NOT_ACTIVATED) || role.equals(Role.USER_NOT_ACTIVATED);
+    }
 }

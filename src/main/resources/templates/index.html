@@ -5,9 +5,16 @@
     <title>Podbel</title>
 </head>
 <body>
-<header>
-    <h3 th:text="${#authentication.getPrincipal().getUsername()}"> </h3>
-</header>
+<h3 Вы авторизованы как th:text="${#authentication.getPrincipal().getUsername()}"></h3>
+<form method="POST" action="/logout">
+    <input type="submit" value="Выйти"/>
+</form>
+<h4> <a href="users">Список пользователей</a> </h4>
+<h4> <a href="change_password">Сменить пароль</a> </h4>
 
+<h5>Скоро все будет</h5>
+<div th:each="role : ${#authentication.getPrincipal().getAuthorities()}">
+    <p th:text="${role.getAuthority()}"></p>
+</div>
 </body>
 </html>

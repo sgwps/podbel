@@ -1,11 +1,11 @@
 package ru.hse_se_podbel.data.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import ru.hse_se_podbel.data.models.UserModel;
-import ru.hse_se_podbel.data.models.UserModel;
+import ru.hse_se_podbel.data.models.User;
 
 import java.util.UUID;
 
-public interface UserRepository extends JpaRepository<UserModel, UUID> {
-    UserModel findByUsername(String username);
+public interface UserRepository extends JpaRepository<User, UUID> {
+    User findByUsername(String username);
+    boolean deleteByUsername(String username);
 }

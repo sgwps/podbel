@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <title>Новый пользователь</title>
+</head>
+<body>
+
+
+  <p>Имя пользователя: </p>
+  <p th:text="${newUserForm.username}"><br><br>
+  <p>Пароль: </p>
+  <p th:text="${newUserForm.password}">
+  <p>  <a href="/">На главную</a> </p>
+</body>
+</html>

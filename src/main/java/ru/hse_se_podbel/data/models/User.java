@@ -9,9 +9,9 @@ import ru.hse_se_podbel.data.models.enums.Role;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Entity
 @Table(name = "users")
@@ -20,7 +20,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserModel implements UserDetails {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -34,9 +34,6 @@ public class UserModel implements UserDetails {
     @NotNull
     private String password;
 
-    @NotNull
-    @Column(name = "is_activated") //  в ТЗ - is_active
-    private boolean isActivated = false;
 
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -44,29 +41,50 @@ public class UserModel implements UserDetails {
     private Role role;
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(new RoleAuthority(role));
+    public Collection<RoleAuthority> getAuthorities() {
+        if (role == Role.ADMIN) {
+            return Stream.of(new RoleAuthority(Role.ADMIN), new RoleAuthority(Role.USER)).collect(Collectors.toList());
+        }
+        return Collections.singleton(getAuthority());
+    }
+
+    public RoleAuthority getAuthority() {
+        return new RoleAuthority(role);
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
 
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
+    public void activate() {
+        if (role == Role.ADMIN_NOT_ACTIVATED) {
+            role = Role.ADMIN;
+        }
+        if (role == Role.USER_NOT_ACTIVATED) {
+            role = Role.USER;
+        }
     }
 }
 
