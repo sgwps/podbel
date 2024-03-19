@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class FirstUserParams {
     private final String username = "admin";
-    private final String password = "1234567890";
+    private final String password = "qwe"; // TODO: change
 
 }

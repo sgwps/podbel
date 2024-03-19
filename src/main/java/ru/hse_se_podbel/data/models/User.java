@@ -48,6 +48,11 @@ public class User implements UserDetails {
         return Collections.singleton(getAuthority());
     }
 
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
     public RoleAuthority getAuthority() {
         return new RoleAuthority(role);
     }

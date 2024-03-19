@@ -29,7 +29,8 @@ public class WebSecurityConfig {
         return httpSecurity.formLogin(form -> form
                 .loginPage("/login").defaultSuccessUrl("/post_login", true))
                 .authorizeHttpRequests((authorize) -> authorize
-                .requestMatchers("/users**").hasRole(Role.ADMIN.toString())
+//                .requestMatchers("/users/**").hasRole(Role.ADMIN.toString())
+                        .requestMatchers("/users/**").hasAuthority("ADMIN")
                 .requestMatchers("/change_password").authenticated()
                 .requestMatchers("/").authenticated()
                 .anyRequest().permitAll())

@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
-@RequestMapping("/users")
+@RequestMapping("users")
 @SessionAttributes("newUserForm")
 public class UserAdministrationController {
     @Autowired
@@ -36,7 +36,7 @@ public class UserAdministrationController {
     @GetMapping("/new")
     public String newUserView(Model model, @ModelAttribute("newUserForm") NewUserForm newUserForm) {
         model.addAttribute("newUserForm", newUserForm);
-        return "/security/user_creation";
+        return "security/user_creation";
     }
 
 
@@ -58,11 +58,11 @@ public class UserAdministrationController {
 
     public String newUserDataView(Model model, @ModelAttribute("newUserForm") NewUserForm newUserForm) {
         model.addAttribute("newUserForm", newUserForm);
-        return "/security/user_data";
+        return "security/user_data";
     }
 
     @GetMapping
-    public String userList(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+    public String userList(Model model, @AuthenticationPrincipal UserDetails userDetails) throws Exception {
         List<UserListItemView> userListItemViewList = userService.loadAll().stream().map(user -> new UserListItemView(user)).toList();
         userListItemViewList.stream().forEach(userListItemView -> {
             if (userListItemView.getUsername().equals(userDetails.getUsername())) {
@@ -70,7 +70,7 @@ public class UserAdministrationController {
             }
         });
         model.addAttribute("users", userListItemViewList);
-        return "/security/users";
+        return "security/users";
     }
 
     @DeleteMapping("/delete/{username}")
@@ -80,4 +80,5 @@ public class UserAdministrationController {
         }
         return "redirect:/users";
     }
+
 }

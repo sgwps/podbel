@@ -1,18 +1,21 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.springframework.org/security/tags">
+
 <head>
     <meta charset="UTF-8">
     <title>Podbel</title>
 </head>
 <body>
-<h3 Вы авторизованы как th:text="${#authentication.getPrincipal().getUsername()}"></h3>
-<form method="POST" action="/logout">
+Вы авторизованы как
+<h3 th:text="${#authentication.getPrincipal().getUsername()}"></h3>
+<form th:method="POST" th:action="@{logout}">
     <input type="submit" value="Выйти"/>
 </form>
-<h4> <a href="users">Список пользователей</a> </h4>
-<h4> <a href="change_password">Сменить пароль</a> </h4>
+<h4> <a th:href="@{users}">Список пользователей</a> </h4>
+<h4> <a th:href="@{change_password}">Сменить пароль</a> </h4>
 
 <h5>Скоро все будет</h5>
+<p th:text="${role1}"></p>
 <div th:each="role : ${#authentication.getPrincipal().getAuthorities()}">
     <p th:text="${role.getAuthority()}"></p>
 </div>
