@@ -17,7 +17,7 @@
 <h5>Скоро все будет</h5>
 <p th:text="${role1}"></p>
 <div th:each="role : ${#authentication.getPrincipal().getAuthorities()}">
-    <p th:text="${role.getAuthority()}"></p>
+    <p th:text="${role.getAuthority()}" ></p>
 </div>
 </body>
 </html>

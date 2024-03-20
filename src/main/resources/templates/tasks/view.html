@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <title th:text="'Задание ' + ${task.number}"></title>
+</head>
+<body>
+<p th:text="${task.question}"></p>
+<br>
+<p th:text="${task.code}"></p>
+<br>
+<table>
+  <tr th:each="option : ${task.answerOptions}">
+    <td th:if="${option.getIsCorrect() && task.getAnswerOptions().size() != 1}" th:text="'+'">
+    <td th:unless="${option.isCorrect}" th:text="''">
+    <td th:text="${option.text}">
+    </td>
+  </tr>
+</table>
+<br>
+
+<table>
+  <tr th:each="subject : ${task.subjects}">
+    <td th:text="'Модуль ' + ${subject.module.getValue()}">
+    <td th:text="${subject.nameRussian}">
+    </td>
+  </tr>
+</table>
+
+<br>
+<p th:text="'Статус: ' + ${task.stage}"></p>
+<div sec:authorize="hasAuthority('ADMIN')">
+  <h4 th:if="${task.stage == T(ru.hse_se_podbel.data.models.enums.Stage).NOT_APPROBATED}">  <a th:href="@{/tasks/aprobate/number(number=${task.stage})}" th:method="PATCH">Аппробировать</a> </h4>
+  <h4 th:if="${task.stage == T(ru.hse_se_podbel.data.models.enums.Stage).NOT_APPROBATED}">  <a th:href="@{/tasks/reject/number(number=${task.stage})}" th:method="PATCH">Отклонить</a> </h4>
+  <h4 th:if="${task.stage == T(ru.hse_se_podbel.data.models.enums.Stage).IN_USE}">  <a th:href="@{/tasks/withdraw/number(number=${task.stage})}" th:method="PATCH">Отклонить</a> </h4>
+
+
+
+</div>
+
+
+
+
+</body>

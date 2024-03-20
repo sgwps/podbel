@@ -11,4 +11,8 @@ public enum Module {
     Module (int number) {
         this.number = number;
     }
+
+    public int getValue() {
+        return number;
+    }
 }

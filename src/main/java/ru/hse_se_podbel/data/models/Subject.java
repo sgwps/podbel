@@ -1,13 +1,12 @@
 package ru.hse_se_podbel.data.models;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import ru.hse_se_podbel.data.models.enums.Module;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -15,6 +14,8 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
+@Builder
+@AllArgsConstructor
 public class Subject { // В ТЗ - GROUP
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -32,4 +33,5 @@ public class Subject { // В ТЗ - GROUP
 
     @Enumerated(EnumType.ORDINAL)
     private Module module;
+
 }

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Пользователи</title>
+</head>
+<body onload="addOptionInput();">
+<form th:action="@{/tasks/new}" th:object="${newTaskForm}" th:method="POST" onsubmit="addOptionsToFormData()" id="form">
+
+
+    <p>Задание:</p>
+    <input type="text" id="text" name="text" th:field="*{text}" required><br><br>
+    <input type="text" id="code" name="code" th:field="*{code}"><br><br>
+
+    <div>
+        <div name="options" id="options">
+        </div>
+        <br>
+        <button id = "addOption" type="button" onclick="addOptionInput()">Добавить вариант ответа</button>
+    </div>
+    <div>
+        <br>
+        <table>
+            <tr th:each="subject, pos : ${newTaskForm.subjects}">
+                <div>
+                    <td th:text="${subject.getKey().getNameRussian()}">
+                    <td >
+                    <input type="checkbox" th:checked="${subject.getValue()}" th:field="*{subjects[__${pos.index}__].value}"/>
+                    </td>
+                </div>
+            </tr>
+        </table>
+    </div>
+    <input type="submit" value="Создать задание">
+</form>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js" ></script>
+<script>
+    var i = 1;
+
+
+
+
+    function createOptionDiv(div_name) {
+        var input = document.createElement("input");
+        input.setAttribute("type", "text");
+        input.setAttribute("name", "option");
+        input.id = div_name + "_option"
+
+
+        var checkbox = document.createElement("input");
+        checkbox.setAttribute("type", "checkbox");
+        checkbox.setAttribute("name", "is_correct");
+        checkbox.id = div_name + "_checkbox";
+        checkbox.style.display = 'none';
+
+
+        var button = document.createElement("button");
+        button.setAttribute("name", "delete_button");
+        button.id = div_name + "_delete_button";
+        button.innerText = "Удалить"
+
+        button.addEventListener('click', function(){
+            deleteOption(div_name);
+            });
+        button.style.display = 'none';
+
+
+
+        var div = document.createElement("div");
+        div.setAttribute("name", div_name);
+        div.id = div_name;
+        div.appendChild(input);
+        div.appendChild(checkbox);
+        div.appendChild(button);
+        return div;
+
+
+    }
+
+    function deleteOption(div_name) {
+
+        var option = document.getElementById(div_name);
+
+        option.remove();
+        event.preventDefault();
+        document.getElementById('addOption').style.display = 'block';
+
+        if (document.getElementById("options").children.length == 1) {
+                Array.from(document.getElementById("options").children).forEach(function (option) {
+                var div_name = option.getAttribute("name");
+                document.getElementById(div_name + "_delete_button").style.display = 'none';
+                document.getElementById(div_name + "_checkbox").style.display = 'none';
+
+            });
+        }
+
+    }
+
+
+
+    function addOptionInput() {
+        document.getElementById("options").appendChild(createOptionDiv("option" + i));
+        i += 1;
+        if (document.getElementById("options").children.length == 6) {
+                 document.getElementById('addOption').style.display = 'none';
+        }
+        if (document.getElementById("options").children.length > 1) {
+                Array.from(document.getElementById("options").children).forEach(function (option) {
+                var div_name = option.getAttribute("name");
+                document.getElementById(div_name + "_delete_button").style.display = 'inline';
+                document.getElementById(div_name + "_checkbox").style.display = 'inline';
+
+            });
+        }
+        event.preventDefault();
+    }
+
+
+    async function addOptionsToFormData() {
+        var index = 0;
+        const form = document.getElementById("form");
+        Array.from(document.getElementById("options").children).forEach(function (option) {
+
+                var div_name = option.getAttribute("name");
+                var option = document.getElementById(div_name + "_option").value;
+                var is_correct = document.getElementById(div_name + "_checkbox").checked;
+
+                const optionHiddenField = document.createElement('input');
+                optionHiddenField.type = 'hidden';
+                optionHiddenField.name = "options[" + index + "].text";
+                optionHiddenField.value = option;
+
+                form.appendChild(optionHiddenField);
+
+
+                const isCorrectHiddenField = document.createElement('input');
+                isCorrectHiddenField.type = 'hidden';
+                if (is_correct) {
+                    isCorrectHiddenField.name = "options[" + index + "].isCorrect";
+                    isCorrectHiddenField.value = is_correct;
+                }
+                else {
+                    isCorrectHiddenField.name = "_options[" + index + "].isCorrect";
+                    isCorrectHiddenField.value = "on";
+
+                }
+
+                form.appendChild(isCorrectHiddenField);
+                index += 1;
+
+        });
+        
+    }
+    
+
+
+
+  </script>
+</body>
+</html>
