@@ -78,7 +78,36 @@ public class TaskController {
         model.addAttribute("task", task);
 
         return "/tasks/view";
+    }
+
+    @PatchMapping("/aprobate/{number}")
+    public String aprobateTask(@PathVariable long number) {
+        Task task = taskService.findByNumber(number);
+        if (task.getStage().equals(Stage.NOT_APPROBATED)) {
+            task.setStage(Stage.IN_USE);
+        }
+        taskService.updateStage(task);
+        return "redirect:/tasks/view/" + Long.toString(task.getNumber());
+    }
+
+    @PatchMapping("/withdraw/{number}")
+    public String withdrawTask(@PathVariable long number) {
+        Task task = taskService.findByNumber(number);
+        if (task.getStage().equals(Stage.IN_USE)) {
+            task.setStage(Stage.WITHDRAWN);
+        }
+        taskService.updateStage(task);
+        return "redirect:/tasks/view/" + Long.toString(task.getNumber());
+    }
 
 
+    @PatchMapping("/reject/{number}")
+    public String rejectTask(@PathVariable long number) {
+        Task task = taskService.findByNumber(number);
+        if (task.getStage().equals(Stage.NOT_APPROBATED)) {
+            task.setStage(Stage.REJECTED);
+        }
+        taskService.updateStage(task);
+        return "redirect:/tasks/view/" + Long.toString(task.getNumber());
     }
 }

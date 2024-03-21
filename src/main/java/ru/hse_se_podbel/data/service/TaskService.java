@@ -38,4 +38,9 @@ public class TaskService {
     public Task findByNumber(long number) {
         return taskRepository.findByNumber(number);
     }
+
+    public Task updateStage(Task task) {
+        taskRepository.save(task);
+        return task;
+    }
 }
