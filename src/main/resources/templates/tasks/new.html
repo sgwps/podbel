@@ -5,6 +5,7 @@
     <title>Пользователи</title>
 </head>
 <body onload="addOptionInput();">
+<div th:if="${error}" class="error-message" th:text="${error}"></div>
 <form th:action="@{/tasks/new}" th:object="${newTaskForm}" th:method="POST" onsubmit="addOptionsToFormData()" id="form">
 
 
@@ -22,12 +23,10 @@
         <br>
         <table>
             <tr th:each="subject, pos : ${newTaskForm.subjects}">
-                <div>
                     <td th:text="${subject.getKey().getNameRussian()}">
                     <td >
                     <input type="checkbox" th:checked="${subject.getValue()}" th:field="*{subjects[__${pos.index}__].value}"/>
                     </td>
-                </div>
             </tr>
         </table>
     </div>

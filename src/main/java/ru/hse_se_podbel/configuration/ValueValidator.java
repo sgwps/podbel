@@ -1,6 +1,7 @@
 package ru.hse_se_podbel.configuration;
 
 import org.springframework.context.annotation.Configuration;
+import ru.hse_se_podbel.data.models.AnswerOption;
 import ru.hse_se_podbel.data.models.Task;
 
 import java.util.regex.Pattern;
@@ -39,10 +40,15 @@ public class ValueValidator {
 
     public boolean validateTask(Task task) {
         if (!validateCode(task.getCode())) return false;
-        if (task.getAnswerOptions().size() == 1) {
-            if (!validateAnswerText(task.getAnswerOptions().get(0).getText())) return false;
+//        if (task.getAnswerOptions().size() == 1) {
+//            if (!validateAnswerText(task.getAnswerOptions().get(0).getText())) return false;
+//        }
+        for (AnswerOption option : task.getAnswerOptions()) {
+            if (!validateAnswerText(option.getText())) {
+                return false;
+            }
         }
-        else if (task.getAnswerOptions().size() < 4 || task.getAnswerOptions().size() > 6) return false;
+        //else if (task.getAnswerOptions().size() < 4 || task.getAnswerOptions().size() > 6) return false; ???
         if (task.getSubjects().size() == 0) return false;
         return true;
     }

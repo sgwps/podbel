@@ -30,9 +30,21 @@
 <br>
 <p th:text="'Статус: ' + ${task.stage}"></p>
 <div sec:authorize="hasAuthority('ADMIN')">
-  <h4 th:if="${task.stage == T(ru.hse_se_podbel.data.models.enums.Stage).NOT_APPROBATED}">  <form th:action="@{/tasks/aprobate/{number}(number=${task.number})}" th:method="PATCH"> <input type="submit" value="Аппробировать"/> </form> </h4>
-  <h4 th:if="${task.stage == T(ru.hse_se_podbel.data.models.enums.Stage).NOT_APPROBATED}">  <form th:action="@{/tasks/reject/{number}(number=${task.number})}" th:method="PATCH"> <input type="submit" value="Отклонить"/> </form> </h4>
-  <h4 th:if="${task.stage == T(ru.hse_se_podbel.data.models.enums.Stage).IN_USE}">  <form th:action="@{/tasks/withdraw/{number}(number=${task.number})}" th:method="PATCH"> <input type="submit" value="Изъять"/> </form> </h4>
+  <h4 th:if="${task.stage == T(ru.hse_se_podbel.data.models.enums.Stage).NOT_APPROBATED}">
+    <form th:action="@{/tasks/aprobate/{number}(number=${task.number})}" th:method="PATCH">
+      <input type="submit" value="Аппробировать"/>
+    </form>
+  </h4>
+  <h4 th:if="${task.stage == T(ru.hse_se_podbel.data.models.enums.Stage).NOT_APPROBATED}">
+    <form th:action="@{/tasks/reject/{number}(number=${task.number})}" th:method="PATCH">
+      <input type="submit" value="Отклонить"/>
+    </form>
+  </h4>
+  <h4 th:if="${task.stage == T(ru.hse_se_podbel.data.models.enums.Stage).IN_USE}">
+    <form th:action="@{/tasks/withdraw/{number}(number=${task.number})}" th:method="PATCH">
+      <input type="submit" value="Изъять"/>
+    </form>
+  </h4>
 
 
 
