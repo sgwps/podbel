@@ -19,5 +19,6 @@
 <div th:each="role : ${#authentication.getPrincipal().getAuthorities()}">
     <p th:text="${role.getAuthority()}" ></p>
 </div>
+<a th:href="@{tasks/new}">Новая таска</a>
 </body>
 </html>

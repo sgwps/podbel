@@ -53,4 +53,14 @@ public class Task {
     @OneToMany(mappedBy = "task")
     private List<AnswerOption> answerOptions;
 
+//    public void addAnswerOptions(List<AnswerOption> options) {
+//        answerOptions.addAll(options);
+//        options.forEach(option -> option.setTask(this));
+//    }
+//
+//    public void removeAnswerOption(AnswerOption option) {
+//        answerOptions.remove(option);
+//        option.setTask(null);
+//    }
+
 }
