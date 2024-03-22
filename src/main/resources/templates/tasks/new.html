@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Пользователи</title>
 </head>
-<body onload="addOptionInput();">
+<body onload="onLoadFunction();">
 <div th:if="${error}" class="error-message" th:text="${error}"></div>
 <form th:action="@{/tasks/new}" th:object="${newTaskForm}" th:method="POST" onsubmit="addOptionsToFormData()" id="form">
 
@@ -17,7 +17,7 @@
         <div name="options" id="options">
         </div>
         <br>
-        <button id = "addOption" type="button" onclick="addOptionInput()">Добавить вариант ответа</button>
+        <button id = "addOption" type="button" onclick="addOptionInputOnClick()">Добавить вариант ответа</button>
     </div>
     <div>
         <br>
@@ -32,10 +32,38 @@
     </div>
     <input type="submit" value="Создать задание">
 </form>
+<div hidden id = "options_hidden">
+    <div th:each="option : ${newTaskForm.options}">
+        <p th:text="${option.text}">
+        <p th:text="${option.isCorrect}" >
+    </div>
+</div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js" ></script>
 <script>
     var i = 1;
 
+
+    function onLoadFunction() {
+        
+        var options_hidden = document.getElementById("options_hidden");
+        Array.from(options_hidden.children).forEach( function(option) {
+            var divName = "option" + i;
+            var optionDiv = createOptionDiv(divName);
+            addOptionInput(optionDiv);
+
+            // console.log(option.innerHTML);
+            console.log(option.getElementsByTagName("p")[0].innerText);
+            console.log(option.getElementsByTagName("p")[1].innerText);
+
+            document.getElementById(divName + "_option").value = option.getElementsByTagName("p")[0].innerText;
+            if (option.getElementsByTagName("p")[1].innerText == "true") {
+                document.getElementById(divName + "_checkbox").checked = true;
+            }
+        });
+        if (!document.getElementById("options").hasChildNodes()) {
+            addOptionInputOnClick();
+        }
+    }
 
 
 
@@ -96,9 +124,8 @@
     }
 
 
-
-    function addOptionInput() {
-        document.getElementById("options").appendChild(createOptionDiv("option" + i));
+    function addOptionInput(optionInputElement) {
+        document.getElementById("options").appendChild(optionInputElement);
         i += 1;
         if (document.getElementById("options").children.length == 6) {
                  document.getElementById('addOption').style.display = 'none';
@@ -112,6 +139,12 @@
             });
         }
         event.preventDefault();
+    }
+
+
+    function addOptionInputOnClick() {
+        addOptionInput(createOptionDiv("option" + i));
+        
     }
 
 

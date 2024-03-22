@@ -1,5 +1,6 @@
 package ru.hse_se_podbel.data.service;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.hse_se_podbel.configuration.ValueValidator;
@@ -40,18 +41,22 @@ public class TaskService {
         return savedTask;
     }
 
+
+
+    @Transactional
     public Task saveNewTask(NewTaskForm taskForm) {
         List<AnswerOption> options = Arrays.stream(taskForm.getOptions()).filter(answerOption -> answerOption.getText().length() != 0).toList();
         List<Subject> subjects = Arrays.stream(taskForm.getSubjects()).filter(subjectBool -> subjectBool.getValue() == true).map(subjectPair -> subjectPair.getKey()).toList();
-        Task task = Task.builder().number(taskRepository.count() + 1).question(taskForm.getText()).code(taskForm.getCode()).subjects(subjects).answerOptions(new ArrayList<>()).stage(Stage.NOT_APPROBATED).build();
+        Task task = Task.builder().id(taskForm.getId()).number(taskForm.isNew() ? taskRepository.count() + 1 :  taskForm.getNumber())
+                .question(taskForm.getText()).code(taskForm.getCode()).subjects(subjects).stage(Stage.NOT_APPROBATED).build();
+        task.setAnswerOptions(options);
         if (!valueValidator.validateTask(task)) {
             throw new ValidationException();
         }
         taskRepository.save(task);
-        task.setAnswerOptions(options.stream().map(answerOption -> {
-            answerOption.setTask(task);
-            return answerOptionService.save(answerOption);
-        }).toList());
+        answerOptionService.deleteByTaskId(task.getId());
+        options.stream().forEach(answerOption -> {answerOption.setTask(task); answerOptionService.save(answerOption);});
+
         return task;
     }
 
@@ -59,9 +64,13 @@ public class TaskService {
         return taskRepository.findByNumber(number);
     }
 
+
     public Task updateStage(Long number, Stage stage) {
         Task task = taskRepository.findByNumber(number);
-        task.setStage(stage);
+        if (task.getStage().equals(Stage.NOT_APPROBATED) && ((stage.equals(Stage.IN_USE) || stage.equals(Stage.REJECTED))) ||
+                (task.getStage().equals(Stage.IN_USE) && stage.equals(Stage.WITHDRAWN))) {
+            task.setStage(stage);
+        }
         return taskRepository.save(task);
     }
 }

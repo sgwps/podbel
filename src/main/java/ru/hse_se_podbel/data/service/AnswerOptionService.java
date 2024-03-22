@@ -5,6 +5,9 @@ import org.springframework.stereotype.Service;
 import ru.hse_se_podbel.data.models.AnswerOption;
 import ru.hse_se_podbel.data.repositories.AnswerOptionRepository;
 
+import java.lang.reflect.Array;
+import java.util.UUID;
+
 @Service
 public class AnswerOptionService {
     @Autowired
@@ -14,5 +17,8 @@ public class AnswerOptionService {
         return answerOptionRepository.save(answerOption);
     }
 
+    public void deleteByTaskId(UUID taskId) {
+        answerOptionRepository.deleteByTaskId(taskId);
+    }
 
 }

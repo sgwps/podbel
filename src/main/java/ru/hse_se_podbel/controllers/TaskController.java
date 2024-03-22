@@ -53,24 +53,18 @@ public class TaskController {
 
     }
 
-    @PostMapping("/new")
-    public String newTask(Model model, @ModelAttribute("newTaskForm") NewTaskForm newTaskForm, BindingResult result, SessionStatus sessionStatus) throws Exception {
-//        List<AnswerOption> options = Arrays.stream(newTaskForm.getOptions()).filter(answerOption -> answerOption.getText().length() != 0).collect(Collectors.toList());
-//        if (options.size() == 1) options.get(0).setIsCorrect(true);
-//        List<Subject> subjects = Arrays.stream(newTaskForm.getSubjects()).filter(subjectBoolPair -> subjectBoolPair.getValue() == true).map(subjectBoolPair -> subjectBoolPair.getKey()).collect(Collectors.toList());
-//        Task task = Task.builder().question(newTaskForm.getText()).code(newTaskForm.getCode()).subjects(subjects).answerOptions(options).stage(Stage.NOT_APPROBATED).build();
-//        try {
-//            task = taskService.saveNewTask(task);
-//            sessionStatus.setComplete();
-//            return "redirect:/tasks/view/" + Long.toString(task.getNumber());
-//        } catch (ValidationException e) {
-//            model.addAttribute("errors", "Ошибка");  // TODO - одному б-гу известо, в ччем именно ошибка, надо разные исключения на разное или хз как
-//            return newTaskView(model, newTaskForm); // TODO - отображение вариантов ответов на фронте
-//        }
-//        if (true) {
-//            throw new Exception("smth wrong");
-//        }
+    @GetMapping("/new/{number}")
+    public String newTaskViewExisting(Model model, @ModelAttribute("newTaskForm") NewTaskForm newTaskForm, @PathVariable long number) {
+        Task task = taskService.findByNumber(number);
+        newTaskForm.fill(task);
+        model.addAttribute("newTaskForm", newTaskForm);
+        return "/tasks/new";
 
+    }
+
+
+    @PostMapping("/new")
+    public String newTask(Model model, @ModelAttribute("newTaskForm") NewTaskForm newTaskForm, BindingResult result, SessionStatus sessionStatus ) throws Exception {
         try {
             Task task = taskService.saveNewTask(newTaskForm);
             sessionStatus.setComplete();
@@ -80,18 +74,20 @@ public class TaskController {
             model.addAttribute("error", "Ошибка валидации");
             return "/tasks/new";
         }
-        catch (Exception e) {
+        /*catch (Exception e) {
             model.addAttribute("error", e.toString());
             return "/tasks/new";
-        }
-
-
+        }*/
     }
+
+
+
 
 
     @GetMapping("/view/{number}")
     public String viewTask(@PathVariable long number, Model model) {  // TODO - выброс 404
         Task task = taskService.findByNumber(number);
+
         model.addAttribute("task", task);
 
         return "/tasks/view";
@@ -99,20 +95,12 @@ public class TaskController {
 
     @PatchMapping("/aprobate/{number}")
     public String aprobateTask(@PathVariable long number) {
-
-//        if (task.getStage().equals(Stage.NOT_APPROBATED)) {
-//            task.setStage(Stage.IN_USE);
-//        }
         Task task = taskService.updateStage(number, Stage.IN_USE);
         return "redirect:/tasks/view/" + Long.toString(task.getNumber());
     }
 
     @PatchMapping("/withdraw/{number}")
     public String withdrawTask(@PathVariable long number) {
-//        Task task = taskService.findByNumber(number);
-//        if (task.getStage().equals(Stage.IN_USE)) {
-//            task.setStage(Stage.WITHDRAWN);
-//        }
         Task task = taskService.updateStage(number, Stage.WITHDRAWN);
         return "redirect:/tasks/view/" + Long.toString(task.getNumber());
     }
@@ -120,10 +108,6 @@ public class TaskController {
 
     @PatchMapping("/reject/{number}")
     public String rejectTask(@PathVariable long number) {
-//        Task task = taskService.findByNumber(number);
-//        if (task.getStage().equals(Stage.NOT_APPROBATED)) {
-//            task.setStage(Stage.REJECTED);
-//        }
         Task task = taskService.updateStage(number, Stage.REJECTED);
         return "redirect:/tasks/view/" + Long.toString(task.getNumber());
     }

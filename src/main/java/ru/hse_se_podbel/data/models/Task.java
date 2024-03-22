@@ -51,7 +51,7 @@ public class Task {
     private List<Subject> subjects = new ArrayList<>();
 
     @OneToMany(mappedBy = "task")
-    private List<AnswerOption> answerOptions;
+    private List<AnswerOption> answerOptions = new ArrayList<>();;
 
 //    public void addAnswerOptions(List<AnswerOption> options) {
 //        answerOptions.addAll(options);
