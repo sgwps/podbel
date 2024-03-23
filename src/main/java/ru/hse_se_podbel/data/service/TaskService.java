@@ -1,5 +1,6 @@
 package ru.hse_se_podbel.data.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -8,6 +9,7 @@ import ru.hse_se_podbel.data.models.AnswerOption;
 import ru.hse_se_podbel.data.models.Task;
 import ru.hse_se_podbel.data.models.Subject;
 import ru.hse_se_podbel.data.models.enums.Stage;
+import ru.hse_se_podbel.data.repositories.SubjectRepository;
 import ru.hse_se_podbel.data.repositories.TaskRepository;
 import ru.hse_se_podbel.forms.NewTaskForm;
 
@@ -23,6 +25,8 @@ public class TaskService {
     TaskRepository taskRepository;
     @Autowired
     AnswerOptionService answerOptionService;
+    @Autowired
+    SubjectRepository subjectRepository;
 
     @Autowired
     ValueValidator valueValidator;
@@ -73,4 +77,15 @@ public class TaskService {
         }
         return taskRepository.save(task);
     }
+
+    public List<Task> getAllTasksBySubject(Subject subject) {
+        List<Task> tasks;
+        tasks = taskRepository.findBySubjects_Id(subject.getId());
+        return tasks;
+    }
+
+    public List<Task> getByStage(Stage stage) {
+        return taskRepository.findByStage(stage);
+    }
+
 }

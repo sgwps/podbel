@@ -11,6 +11,7 @@
 <form th:method="POST" th:action="@{logout}">
     <input type="submit" value="Выйти"/>
 </form>
+<a th:href="@{subjects/list}">Список тем</a>
 <h4> <a th:href="@{users}">Список пользователей</a> </h4>
 <h4> <a th:href="@{change_password}">Сменить пароль</a> </h4>
 
@@ -20,5 +21,11 @@
     <p th:text="${role.getAuthority()}" ></p>
 </div>
 <a th:href="@{tasks/new}">Новая таска</a>
+<br>
+<a th:href="@{tasks/stage/{stage}(stage=${T(ru.hse_se_podbel.data.models.enums.Stage).NOT_APPROBATED})}">Список не апробированных заданий</a>
+<br>
+<a th:href="@{tasks/stage/{stage}(stage=${T(ru.hse_se_podbel.data.models.enums.Stage).WITHDRAWN})}">Список изъятых заданий</a>
+<br>
+<a th:href="@{tasks/stage/{stage}(stage=${T(ru.hse_se_podbel.data.models.enums.Stage).REJECTED})}">Список отклонённых заданий</a>
 </body>
 </html>

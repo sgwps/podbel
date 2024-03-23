@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Subjects</title>
+</head>
+<body>
+<div th:each="module : ${modules}">
+    <h2 th:text="${module}"></h2>
+    <ul>
+        <li th:each="subject : ${subjects}" th:if="${subject.module == module}">
+            <a th:text="${subject.nameRussian}" th:href="@{/subjects/{id}(id=${subject.id})}"></a>
+        </li>
+    </ul>
+</div>
+</body>
+</html>
