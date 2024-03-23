@@ -80,10 +80,6 @@ public class TaskController {
         }*/
     }
 
-
-
-
-
     @GetMapping("/view/{number}")
     public String viewTask(@PathVariable long number, Model model) {  // TODO - выброс 404
         Task task = taskService.findByNumber(number);
@@ -110,5 +106,19 @@ public class TaskController {
     public String rejectTask(@PathVariable long number) {
         Task task = taskService.updateStage(number, Stage.REJECTED);
         return "redirect:/tasks/view/" + Long.toString(task.getNumber());
+    }
+
+    @GetMapping("/not_aprobated")
+    public String listNotAprobated(Model model) {
+        List<Task> tasks = taskService.getByStage(Stage.NOT_APPROBATED);
+        model.addAttribute("tasks", tasks);
+        return "/tasks/not_aprobated";
+    }
+
+    @GetMapping("/withdrawn")
+    public String listWithdrawn(Model model) {
+        List<Task> tasks = taskService.getByStage(Stage.WITHDRAWN);
+        model.addAttribute("tasks", tasks);
+        return "/tasks/withdrawn";
     }
 }

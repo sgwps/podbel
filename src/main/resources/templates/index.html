@@ -11,6 +11,7 @@
 <form th:method="POST" th:action="@{logout}">
     <input type="submit" value="Выйти"/>
 </form>
+<a th:href="@{subjects/list}">Список тем</a>
 <h4> <a th:href="@{users}">Список пользователей</a> </h4>
 <h4> <a th:href="@{change_password}">Сменить пароль</a> </h4>
 
@@ -20,5 +21,9 @@
     <p th:text="${role.getAuthority()}" ></p>
 </div>
 <a th:href="@{tasks/new}">Новая таска</a>
+<br>
+<a th:href="@{tasks/not_aprobated}">Список не апробированных заданий</a>
+<br>
+<a th:href="@{tasks/withdrawn}">Список изъятых заданий</a>
 </body>
 </html>
