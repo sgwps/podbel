@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Stage</title>
+</head>
+<body>
+<div th:if="${stage == T(ru.hse_se_podbel.data.models.enums.Stage).NOT_APPROBATED}">
+    <h2>Не апробированые задания</h2>
+    <div th:each="task : ${tasks}">
+        <a th:text="${task.number}" th:href="@{/tasks/view/{number}(number=${task.number})}"></a>.  <span th:text="${task.question}"></span>
+    </div>
+</div>
+<div th:if="${stage == T(ru.hse_se_podbel.data.models.enums.Stage).WITHDRAWN}">
+    <h2>Изъятые задания</h2>
+    <div th:each="task : ${tasks}">
+        <a th:text="${task.number}" th:href="@{/tasks/view/{number}(number=${task.number})}"></a>.  <span th:text="${task.question}"></span>
+    </div>
+</div>
+<div th:if="${stage == T(ru.hse_se_podbel.data.models.enums.Stage).REJECTED}">
+    <h2>Отклонённые задания</h2>
+    <div th:each="task : ${tasks}">
+        <a th:text="${task.number}" th:href="@{/tasks/view/{number}(number=${task.number})}"></a>.  <span th:text="${task.question}"></span>
+    </div>
+</div>
+
+
+</body>
+</html>

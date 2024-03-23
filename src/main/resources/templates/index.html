@@ -22,8 +22,10 @@
 </div>
 <a th:href="@{tasks/new}">Новая таска</a>
 <br>
-<a th:href="@{tasks/not_aprobated}">Список не апробированных заданий</a>
+<a th:href="@{tasks/stage/{stage}(stage=${T(ru.hse_se_podbel.data.models.enums.Stage).NOT_APPROBATED})}">Список не апробированных заданий</a>
 <br>
-<a th:href="@{tasks/withdrawn}">Список изъятых заданий</a>
+<a th:href="@{tasks/stage/{stage}(stage=${T(ru.hse_se_podbel.data.models.enums.Stage).WITHDRAWN})}">Список изъятых заданий</a>
+<br>
+<a th:href="@{tasks/stage/{stage}(stage=${T(ru.hse_se_podbel.data.models.enums.Stage).REJECTED})}">Список отклонённых заданий</a>
 </body>
 </html>

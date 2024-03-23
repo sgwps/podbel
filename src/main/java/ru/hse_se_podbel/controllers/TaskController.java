@@ -108,17 +108,11 @@ public class TaskController {
         return "redirect:/tasks/view/" + Long.toString(task.getNumber());
     }
 
-    @GetMapping("/not_aprobated")
-    public String listNotAprobated(Model model) {
-        List<Task> tasks = taskService.getByStage(Stage.NOT_APPROBATED);
+    @GetMapping("/stage/{stage}")
+    public String listByStage(Model model, @PathVariable Stage stage) {
+        List<Task> tasks = taskService.getByStage(stage);
         model.addAttribute("tasks", tasks);
-        return "/tasks/not_aprobated";
-    }
-
-    @GetMapping("/withdrawn")
-    public String listWithdrawn(Model model) {
-        List<Task> tasks = taskService.getByStage(Stage.WITHDRAWN);
-        model.addAttribute("tasks", tasks);
-        return "/tasks/withdrawn";
+        model.addAttribute("stage", stage);
+        return "/tasks/stage";
     }
 }
