@@ -35,7 +35,7 @@ public class NewTaskForm implements Form {
         text = task.getQuestion();
         code = task.getCode();
         for (SubjectCheckboxForm subjectCheckboxForm : subjects) {   // TODO: если поменять массив на словарь, можно оптимизировать
-            if (task.getSubjects().stream().anyMatch(subject -> subject.getId().equals(subjectCheckboxForm.getKey().getId()))) {
+            if (task.getSubjects().stream().anyMatch(subject -> subject.getId() == subjectCheckboxForm.getKey().getId())) {
                 subjectCheckboxForm.setValue(true);
             }
         }

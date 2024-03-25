@@ -26,7 +26,7 @@ public class SubjectService {
         return subjectRepository.findAll();
     }
 
-    public Subject getById(UUID id) {
+    public Subject getById(int id) {
         Optional<Subject> optionalSubject = subjectRepository.findById(id);
         if (optionalSubject.isPresent()) {
             return optionalSubject.get();

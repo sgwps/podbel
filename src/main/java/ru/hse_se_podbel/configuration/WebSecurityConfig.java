@@ -34,6 +34,7 @@ public class WebSecurityConfig {
                 .requestMatchers("/change_password").authenticated()
                 .requestMatchers("/").authenticated()
                 .anyRequest().permitAll())
+                .csrf(csrf -> csrf.disable())
                 .logout((logout) -> logout.logoutSuccessUrl("/login")).build();
     }
 

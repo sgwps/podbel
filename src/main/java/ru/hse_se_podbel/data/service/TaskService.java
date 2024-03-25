@@ -1,6 +1,5 @@
 package ru.hse_se_podbel.data.service;
 
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -8,15 +7,14 @@ import ru.hse_se_podbel.configuration.ValueValidator;
 import ru.hse_se_podbel.data.models.AnswerOption;
 import ru.hse_se_podbel.data.models.Task;
 import ru.hse_se_podbel.data.models.Subject;
+import ru.hse_se_podbel.data.models.enums.Module;
 import ru.hse_se_podbel.data.models.enums.Stage;
 import ru.hse_se_podbel.data.repositories.SubjectRepository;
 import ru.hse_se_podbel.data.repositories.TaskRepository;
 import ru.hse_se_podbel.forms.NewTaskForm;
 
 import javax.validation.ValidationException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -67,6 +65,9 @@ public class TaskService {
     public Task findByNumber(long number) {
         return taskRepository.findByNumber(number);
     }
+    public Optional<Task> findById(UUID id) {
+        return taskRepository.findById(id);
+    }
 
 
     public Task updateStage(Long number, Stage stage) {
@@ -80,7 +81,7 @@ public class TaskService {
 
     public List<Task> getAllTasksBySubject(Subject subject) {
         List<Task> tasks;
-        tasks = taskRepository.findBySubjects_Id(subject.getId());
+        tasks = taskRepository.findBySubjectsId(subject.getId());
         return tasks;
     }
 
@@ -88,4 +89,23 @@ public class TaskService {
         return taskRepository.findByStage(stage);
     }
 
+
+    public List<UUID> listOfTaskForModule(Module module) {
+        return taskRepository.listOfTaskForModule(module.getValue());
+    }
+
+
+    public List<UUID> listOfTaskForSession(Module module, int count) {
+        List<UUID> tasksForModule = listOfTaskForModule(module);
+        Collections.shuffle(tasksForModule);
+        return tasksForModule.subList(0, count);
+    }
+
+    public boolean checkAnswer(UUID id, List<String> answer) {
+        Task task = findById(id).get();
+        Set<String> correct = task.getAnswerOptions().stream().filter(i -> i.getIsCorrect()).map(i -> i.getText()).collect(Collectors.toSet());
+        // TODO: счетчик
+        return  correct.equals(new HashSet<>(answer));
+
+    }
 }

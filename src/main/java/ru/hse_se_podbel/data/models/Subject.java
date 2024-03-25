@@ -19,7 +19,7 @@ import java.util.UUID;
 public class Subject { // В ТЗ - GROUP
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
+    private int id;
 
     @NotNull
     @Size(max = 100)
@@ -31,7 +31,20 @@ public class Subject { // В ТЗ - GROUP
     @Column(name = "name_english", unique = true)
     private String shortNameEnglish;
 
-    @Enumerated(EnumType.ORDINAL)
-    private Module module;
+
+
+    @Column(name = "module")
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
+    private int module;
+
+    public void setModule(Module value) {
+        this.module = value.getValue();
+    }
+
+    public Module getModule() {
+        return Module.find(module);
+    }
+
 
 }

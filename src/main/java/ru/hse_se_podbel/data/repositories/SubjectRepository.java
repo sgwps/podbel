@@ -5,5 +5,5 @@ import ru.hse_se_podbel.data.models.Subject;
 
 import java.util.UUID;
 
-public interface SubjectRepository extends JpaRepository<Subject, UUID> {
+public interface SubjectRepository extends JpaRepository<Subject, Integer> {
 }

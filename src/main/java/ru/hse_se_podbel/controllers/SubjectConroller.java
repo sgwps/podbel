@@ -35,7 +35,7 @@ public class SubjectConroller {
     }
 
     @GetMapping("/{id}")
-    public String viewSubject(Model model, @PathVariable UUID id) {
+    public String viewSubject(Model model, @PathVariable int id) {
         try {
             Subject subject = subjectService.getById(id);
             model.addAttribute("subject", subject);

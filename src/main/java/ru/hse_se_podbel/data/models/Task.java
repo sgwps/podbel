@@ -27,10 +27,10 @@ public class Task {
     private Long number;
 
     @NotNull
-    @Size(max=300)
+    @Column(length=10000)
     private String question;
 
-    @Size(max=2800)
+    @Column(length=28000)
     private String code;
 
     @NotNull

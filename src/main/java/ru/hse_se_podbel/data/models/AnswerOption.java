@@ -30,7 +30,7 @@ public class AnswerOption {
 
     @NotNull
     @Column(name = "is_code")
-    private boolean isCode;
+    private boolean isCode = false;
 
     @NotNull
     @Size(max = 100)

@@ -1,5 +1,7 @@
 package ru.hse_se_podbel.data.models.enums;
 
+import java.util.NoSuchElementException;
+
 public enum Module {
     FIRST(1),
     SECOND(2),
@@ -14,5 +16,14 @@ public enum Module {
 
     public int getValue() {
         return number;
+    }
+
+    public static Module find(int value) {
+        for (Module module : values()){
+            if (module.getValue() == value){
+                return module;
+            }
+        }
+        throw new NoSuchElementException("Неккорректный модуль");
     }
 }

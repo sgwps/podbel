@@ -21,16 +21,16 @@ public class ValueValidator {
 
 
     public boolean validateAnswerText(String text) {
-        return text.length() > 0 && text.length() <= 30;
+        return text.length() > 0 && text.length() <= 300;
     }
 
     public boolean validateCode(String code) {
         String[] splitted = code.split("\n");
-        if (splitted.length > 40) {
+        if (splitted.length > 100) {
             return false;
         }
         for (String line : splitted) {
-            if (line.length() > 70) {
+            if (line.length() > 700) {
                 return false;
             }
         }
