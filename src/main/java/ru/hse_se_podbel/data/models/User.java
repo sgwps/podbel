@@ -2,9 +2,7 @@ package ru.hse_se_podbel.data.models;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import ru.hse_se_podbel.data.models.classes.RoleAuthority;
 import ru.hse_se_podbel.data.models.enums.Role;
 
 import javax.validation.constraints.NotNull;
@@ -41,9 +39,9 @@ public class User implements UserDetails {
     private Role role;
 
     @Override
-    public Collection<RoleAuthority> getAuthorities() {
+    public Collection<Role> getAuthorities() {
         if (role == Role.ADMIN) {
-            return Stream.of(new RoleAuthority(Role.ADMIN), new RoleAuthority(Role.USER)).collect(Collectors.toList());
+            return Stream.of(Role.ADMIN, Role.USER).collect(Collectors.toList());
         }
         return Collections.singleton(getAuthority());
     }
@@ -53,8 +51,8 @@ public class User implements UserDetails {
         return password;
     }
 
-    public RoleAuthority getAuthority() {
-        return new RoleAuthority(role);
+    public Role getAuthority() {
+        return role;
     }
 
     @Override
