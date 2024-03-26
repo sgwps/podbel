@@ -52,7 +52,7 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
     Resource tasksFile;
 
     public void saveSubjects() throws IOException {
-        try (Scanner scanner = new Scanner(subjectsFile.getFile())) {
+        try (Scanner scanner = new Scanner(subjectsFile.getInputStream())) {
             while (scanner.hasNextLine()) {
                 String[] line = scanner.nextLine().strip().split(";");
                 Module module = Module.find(Integer.parseInt(line[2]));
@@ -94,7 +94,7 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
     }
 
     public void saveTasks() throws IOException {
-        try (Scanner scanner = new Scanner(tasksFile.getFile())) {
+        try (Scanner scanner = new Scanner(tasksFile.getInputStream())) {
             String jsonString = scanner.useDelimiter("\\Z").next();
             ObjectMapper mapper = new ObjectMapper();
             JsonFactory factory = mapper.getFactory();
