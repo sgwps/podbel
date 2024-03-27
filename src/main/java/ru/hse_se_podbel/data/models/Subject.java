@@ -26,10 +26,6 @@ public class Subject { // В ТЗ - GROUP
     @Column(name = "name_russian")
     private String nameRussian;
 
-    @NotNull
-    @Size(max = 50)
-    @Column(name = "name_english", unique = true)
-    private String shortNameEnglish;
 
 
 

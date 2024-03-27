@@ -7,11 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class NewUserForm implements Form {
-    @Override
-    public boolean isValid() {
-        return true;
-    }
+public class NewUserForm {
 
     private String username;
     private String password;

@@ -10,8 +10,8 @@
 
 
     <p>Задание:</p>
-    <input type="text" id="text" name="text" th:field="*{text}" required><br><br>
-    <input type="text" id="code" name="code" th:field="*{code}"><br><br>
+    <label for="text"></label><textarea id="text" name="text" th:field="*{text}" required></textarea><br><br>
+    <label for="code"></label><textarea id="code" name="code" th:field="*{code}"></textarea><br><br>
 
     <div>
         <div name="options" id="options">
@@ -60,7 +60,7 @@
                 document.getElementById(divName + "_checkbox").checked = true;
             }
         });
-        if (!document.getElementById("options").hasChildNodes()) {
+        if (document.getElementById("options").children.length == 0) {
             addOptionInputOnClick();
         }
     }
@@ -127,7 +127,7 @@
     function addOptionInput(optionInputElement) {
         document.getElementById("options").appendChild(optionInputElement);
         i += 1;
-        if (document.getElementById("options").children.length == 6) {
+        if (document.getElementById("options").children.length == 10) {
                  document.getElementById('addOption').style.display = 'none';
         }
         if (document.getElementById("options").children.length > 1) {

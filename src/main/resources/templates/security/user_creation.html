@@ -5,9 +5,9 @@
     <title>Новый пользователь</title>
 </head>
 <body>
+<div th:text="${error}">
+</div>
 <form th:action="@{/users/new}" th:object="${newUserForm}" th:method="POST">
-
-
     <label for="username">Имя пользователя:</label>
     <input type="username" id="username" name="username" th:field="*{username}" required><br><br>
     <label for="password">Пароль:</label>

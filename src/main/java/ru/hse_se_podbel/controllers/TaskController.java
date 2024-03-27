@@ -1,11 +1,13 @@
 package ru.hse_se_podbel.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.server.ResponseStatusException;
 import ru.hse_se_podbel.data.models.AnswerOption;
 import ru.hse_se_podbel.data.models.Subject;
 import ru.hse_se_podbel.data.models.Task;
@@ -56,6 +58,9 @@ public class TaskController {
     @GetMapping("/new/{number}")
     public String newTaskViewExisting(Model model, @ModelAttribute("newTaskForm") NewTaskForm newTaskForm, @PathVariable long number) {
         Task task = taskService.findByNumber(number);
+        if (task.getStage() == Stage.IN_USE || task.getStage() == Stage.WITHDRAWN) {
+            throw new ResponseStatusException(HttpStatusCode.valueOf(409), "Задание не доступно для редактирования");
+        }
         newTaskForm.fill(task);
         model.addAttribute("newTaskForm", newTaskForm);
         return "/tasks/new";
@@ -71,21 +76,16 @@ public class TaskController {
             return "redirect:view/" + Long.toString(task.getNumber());
         }
         catch (ValidationException e) {
-            model.addAttribute("error", "Ошибка валидации");
+            model.addAttribute("error", e.getMessage());
             return "/tasks/new";
         }
-        /*catch (Exception e) {
-            model.addAttribute("error", e.toString());
-            return "/tasks/new";
-        }*/
+
     }
 
     @GetMapping("/view/{number}")
     public String viewTask(@PathVariable long number, Model model) {  // TODO - выброс 404
         Task task = taskService.findByNumber(number);
-
         model.addAttribute("task", task);
-
         return "/tasks/view";
     }
 

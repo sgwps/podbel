@@ -28,9 +28,6 @@ public class AnswerOption {
     @Column(name = "is_correct")
     private boolean isCorrect;
 
-    @NotNull
-    @Column(name = "is_code")
-    private boolean isCode = false;
 
     @NotNull
     @Size(max = 100)

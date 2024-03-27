@@ -81,13 +81,6 @@ public class User implements UserDetails {
         return username;
     }
 
-    public void activate() {
-        if (role == Role.ADMIN_NOT_ACTIVATED) {
-            role = Role.ADMIN;
-        }
-        if (role == Role.USER_NOT_ACTIVATED) {
-            role = Role.USER;
-        }
-    }
+
 }
 

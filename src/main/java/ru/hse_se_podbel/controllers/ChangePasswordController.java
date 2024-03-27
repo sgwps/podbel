@@ -1,5 +1,7 @@
 package ru.hse_se_podbel.controllers;
 
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -25,8 +27,7 @@ import javax.validation.ValidationException;
 @RequestMapping("/change_password")
 @SessionAttributes("changePasswordForm")
 public class ChangePasswordController {
-    @Autowired
-    PasswordEncoderConfig passwordEncoderConfig;
+
 
     @Autowired
     UserService userService;
@@ -44,24 +45,16 @@ public class ChangePasswordController {
 
 
     @PostMapping
-    public String proceed(Model model, @ModelAttribute("changePasswordForm") ChangePasswordForm changePasswordForm, @AuthenticationPrincipal UserDetails userDetails, BindingResult result, SessionStatus sessionStatus) {
-        if (!changePasswordForm.isValid()) {
-            model.addAttribute("errors", "Пароли не совпадают");
-            return getView(model, changePasswordForm);
-        }
-        if (!passwordEncoderConfig.getPasswordEncoder().matches(changePasswordForm.getOldPassword(), userDetails.getPassword())) {
-            model.addAttribute("errors", "Направильный старый пароль");
-            return getView(model, changePasswordForm);
-        }
-        User user = userService.loadUserByUsername(userDetails.getUsername());
-        user.setPassword(changePasswordForm.getNewPassword());
+    public String proceed(Model model, @ModelAttribute("changePasswordForm") ChangePasswordForm changePasswordForm, @AuthenticationPrincipal UserDetails userDetails, BindingResult result, SessionStatus sessionStatus,
+                          HttpServletRequest request) throws ServletException {
         try {
-            user.activate();
-            userService.save(user, true);
+            User user = userService.loadUserByUsername(userDetails.getUsername());
+            userService.updatePassword(user, changePasswordForm);
             sessionStatus.setComplete();
+            request.logout();
             return "redirect:/";
         } catch (ValidationException e) {
-            model.addAttribute("errors", "Пароль не соответсвет критериям");
+            model.addAttribute("error", e.getMessage());
             return getView(model, changePasswordForm);
         }
 

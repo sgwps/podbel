@@ -1,8 +1,10 @@
 package ru.hse_se_podbel.controllers;
 
 
+import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.Banner;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -10,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.server.ResponseStatusException;
 import ru.hse_se_podbel.data.models.User;
 import ru.hse_se_podbel.data.models.enums.Role;
 import ru.hse_se_podbel.data.service.UserService;
@@ -36,7 +39,7 @@ public class UserAdministrationController {
     @GetMapping("/new")
     public String newUserView(Model model, @ModelAttribute("newUserForm") NewUserForm newUserForm) {
         model.addAttribute("newUserForm", newUserForm);
-        return "security/user_creation";
+        return "/security/user_creation";
     }
 
 
@@ -46,11 +49,11 @@ public class UserAdministrationController {
                 newUserForm.isAdmin() == true ?
                 Role.ADMIN_NOT_ACTIVATED : Role.USER_NOT_ACTIVATED).build();
         try {
-            userService.save(user, true);
+            userService.saveNew(user, true);
             sessionStatus.setComplete();
             return newUserDataView(model, newUserForm);
         } catch (ValidationException e) {
-            model.addAttribute("errors", "Имя пользователя или пароль не соотсветсвют критериям");
+            model.addAttribute("error", e.getMessage());
             return newUserView(model, newUserForm);
         }
 
@@ -58,7 +61,7 @@ public class UserAdministrationController {
 
     public String newUserDataView(Model model, @ModelAttribute("newUserForm") NewUserForm newUserForm) {
         model.addAttribute("newUserForm", newUserForm);
-        return "security/user_data";
+        return "/security/user_data";
     }
 
     @GetMapping
@@ -70,13 +73,16 @@ public class UserAdministrationController {
             }
         });
         model.addAttribute("users", userListItemViewList);
-        return "security/users";
+        return "/security/users";
     }
 
     @DeleteMapping("/delete/{username}")
-    public String deleteDishAdmin(@PathVariable("username") String username, @AuthenticationPrincipal UserDetails userDetails) {
+    public String deleteUser(@PathVariable("username") String username, @AuthenticationPrincipal UserDetails userDetails) {
         if (!userDetails.getUsername().equals(username)) {
-            boolean deleted = userService.delete(username);
+            userService.delete(username);
+        }
+        else {
+            throw new ResponseStatusException(HttpStatusCode.valueOf(400), "Вы не можете удалить сами себя");
         }
         return "redirect:/users";
     }

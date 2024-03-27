@@ -7,5 +7,5 @@ import java.util.UUID;
 
 public interface UserRepository extends JpaRepository<User, UUID> {
     User findByUsername(String username);
-    boolean deleteByUsername(String username);
+    int deleteByUsername(String username);
 }

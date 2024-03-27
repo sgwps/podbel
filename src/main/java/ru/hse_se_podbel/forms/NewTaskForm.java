@@ -13,21 +13,18 @@ import java.util.*;
 @Getter
 @Setter
 @NoArgsConstructor
-public class NewTaskForm implements Form {
+public class NewTaskForm  {
 
 
     private String text;
     private String code;
-    private SubjectCheckboxForm[] subjects;
-    private AnswerOption[] options;
+    private SubjectCheckboxForm[] subjects = new SubjectCheckboxForm[0];
+    private AnswerOption[] options = new AnswerOption[0];
     private long number;
     @ReadOnlyProperty
     private UUID id = null;
 
-    @Override
-    public boolean isValid() {
-        return true;
-    }
+
 
     public boolean isNew() { return id == null; }
 

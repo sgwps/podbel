@@ -18,7 +18,7 @@
     <td th:text="${user.role}">
     <td th:text="${user.activationStatus}">
     <td>
-    <form th:if="${user.isCurrentUser() == false}" th:method="DELETE" th:action="@{delete/{username}(username=${user.username})}">
+    <form th:if="${user.isCurrentUser() == false}" th:method="DELETE" th:action="@{users/delete/{username}(username=${user.username})}">
       <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
       <input type="submit" value="Удалить пользователя"/>
     </form>

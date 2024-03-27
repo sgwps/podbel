@@ -41,8 +41,8 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
     private FirstUserParams firstUserParams = new FirstUserParams();
 
     public void createFirstUser() {
-        User user = User.builder().username(firstUserParams.getUsername()).password(firstUserParams.getPassword()).role(Role.ADMIN).build();  // TODO: вернуть неактивированный
-        userService.save(user);
+        User user = User.builder().username(firstUserParams.getUsername()).password(firstUserParams.getPassword()).role(Role.ADMIN_NOT_ACTIVATED).build();
+        userService.saveNew(user);
     }
 
     @Value("classpath:subjects.csv")
@@ -57,7 +57,7 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
                 String[] line = scanner.nextLine().strip().split(";");
                 Module module = Module.find(Integer.parseInt(line[2]));
                 int number = Integer.parseInt(line[0]);
-                Subject subject = Subject.builder().nameRussian(line[1]).shortNameEnglish(Integer.toString(number)).id(number).build();
+                Subject subject = Subject.builder().nameRussian(line[1]).id(number).build();
                 subject.setModule(module);
                 subjectService.save(subject);
             }
